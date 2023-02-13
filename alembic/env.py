@@ -38,15 +38,17 @@ target_metadata = Base.metadata
 
 
 def process_revision_directives(context, revision, directives):
+    """
+    Sets the incremental Revision ID.
+    """
     migration_script = directives[0]
     head_revision = ScriptDirectory.from_config(context.config).get_current_head()
-
     if head_revision is None:
         new_rev_id = 1
     else:
         last_rev_id = int(head_revision.lstrip('0'))
         new_rev_id = last_rev_id + 1
-    migration_script.rev_id = '{0:04}'.format(new_rev_id)
+    migration_script.rev_id = f'{new_rev_id:04}'
 
 
 def run_migrations_offline():
