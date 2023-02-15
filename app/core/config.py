@@ -5,8 +5,7 @@ from pydantic import BaseSettings, EmailStr
 
 class Settings(BaseSettings):
     """
-    Defines the basic settings of the application: application name,
-    description, database connection and secret key. These settings
+    Defines the basic settings of the application. These settings
     are by default. Initially, these settings are checked in the
     operation system environment variables. It is also possible
     to directly access the .env file.
@@ -17,6 +16,12 @@ class Settings(BaseSettings):
     secret: str = 'SECRET'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
+    mail_username: str = 'username',
+    mail_password: str = '*********',
+    mail_from: str = 'test@mail.com',
+    mail_port: int = 465,
+    mail_server: str = 'mail server',
+    mail_from_name: str = 'from test mail',
 
     class Config:
         """
