@@ -6,6 +6,11 @@ from app.core.db import Base
 
 
 class ProjectDonationBase(Base):
+    """
+    Abstract model. Inherits attributes BaseClass.
+    The descriptions of the fields is contained in the child
+    models, since their specifications is different.
+    """
     __abstract__ = True
 
     full_amount = Column(Integer)
