@@ -10,7 +10,7 @@ class CharityProjectBase(BaseModel):
     and validates them.
     """
     name: str = Field(..., min_length=1, max_length=100)
-    descriptoin: str
+    description: str
     full_amount: PositiveInt
 
 
@@ -40,7 +40,7 @@ class CharityProjectDB(CharityProjectBase):
     invested_amount: int
     fully_invested: bool
     create_date: datetime
-    close_date: datetime
+    close_date: Optional[datetime]
 
     class Config:
         """
