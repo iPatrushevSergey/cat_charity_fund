@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,7 +19,7 @@ router = APIRouter()
 
 @router.get(
     '/',
-    response_model=CharityProjectDB,
+    response_model=List[CharityProjectDB],
     response_model_exclude_none=True,
 )
 async def get_all_charity_projects(
@@ -36,8 +38,8 @@ async def get_all_charity_projects(
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
-async def create_new_charity_project(
-    charity_project: CharityProjectCreate,
+async def create_charity_project(
+    object_in: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
     """
@@ -45,8 +47,8 @@ async def create_new_charity_project(
     and returns an object with all fields, excluding the `close_date` field.
     Only superuser is available.
     """
-    await check_name_duplicate(charity_project.name, session)
-    return await charity_project_crud.create(charity_project, session)
+    await check_name_duplicate(object_in.name, session)
+    return await charity_project_crud.create(object_in, session)
 
 
 @router.patch(
@@ -86,7 +88,7 @@ async def update_charity_project(
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
-async def remove_charity_project(
+async def delete_charity_project(
     project_id: int,
     session: AsyncSession = Depends(get_async_session),
 ):

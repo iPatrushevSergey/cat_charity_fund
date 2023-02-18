@@ -1,6 +1,10 @@
+from typing import Optional
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models import User
 
 
 class CRUDBase:
@@ -22,7 +26,12 @@ class CRUDBase:
         db_objects = await session.execute(select(self.model))
         return db_objects.scalars().all()
 
-    async def create(self, object_in, session: AsyncSession):
+    async def create(
+        self,
+        object_in,
+        session: AsyncSession,
+        user: Optional[User] = None
+    ):
         """
         Converts a schema object into a hash-table, creates a model object
         in the database, updates the response object (taking into account
@@ -30,6 +39,8 @@ class CRUDBase:
         and returns it.
         """
         object_in_data = object_in.dict()
+        if user is not None:
+            object_in_data['user_id'] = user.id
         db_object = self.model(**object_in_data)
         session.add(db_object)
         await session.commit()

@@ -12,7 +12,7 @@ class DonationCreate(BaseModel):
     comment: Optional[str]
 
 
-class DonationGetCreatedDB(DonationCreate):
+class DonationGetCreateDB(DonationCreate):
     """
     The schema defines fields for responses to POST and `Get User Donations`
     requests.
@@ -20,8 +20,15 @@ class DonationGetCreatedDB(DonationCreate):
     id: int
     create_date: datetime
 
+    class Config:
+        """
+        The orm_mode attribute allows returning CharityProject
+        objects from the database.
+        """
+        orm_mode = True
 
-class DonationGetDB(DonationGetCreatedDB):
+
+class DonationGetDB(DonationGetCreateDB):
     """
     The schema defines the fields for responding to the `Get All Donations`
     request.
