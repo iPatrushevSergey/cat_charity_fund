@@ -27,7 +27,7 @@ class CharityProjectUpdate(CharityProjectBase):
     project and validates them.
     """
     name: Optional[str] = Field(None, min_length=1, max_length=100)
-    descriptoin: Optional[str]
+    description: Optional[str]
     full_amount: Optional[PositiveInt]
 
 
