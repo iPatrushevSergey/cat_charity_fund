@@ -1,25 +1,31 @@
-from typing import Optional
+from typing import Generic, List, Optional, Type, TypeVar
 
 from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.db import Base
 from app.models import User
 
+ModelType = TypeVar('ModelType', bound=Base)
+CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)
+PatchSchemaType = TypeVar('PatchSchemaType', bound=Optional[BaseModel])
 
-class CRUDBase:
+
+class CRUDBase(Generic[ModelType, CreateSchemaType, PatchSchemaType]):
     """
     The base class for working with the database. The main methods
     are defined: get_all, create, get, update, delete.
     """
 
-    def __init__(self, model):
+    def __init__(self, model: Type[ModelType]) -> None:
         """
         Initializes an object of the class with the attribute - model.
         """
         self.model = model
 
-    async def get_all(self, session: AsyncSession):
+    async def get_all(self, session: AsyncSession) -> List[ModelType]:
         """
         Returns all objects of a specific model from the database.
         """
@@ -28,10 +34,10 @@ class CRUDBase:
 
     async def create(
         self,
-        object_in,
+        object_in: CreateSchemaType,
         session: AsyncSession,
-        user: Optional[User] = None
-    ):
+        user: Optional[User] = None,
+    ) -> ModelType:
         """
         Converts a schema object into a hash-table, creates a model object
         in the database, updates the response object (taking into account
@@ -52,8 +58,8 @@ class CRUDBase:
         attr_name: str,
         attr_value: str,
         session: AsyncSession,
-        all_objects: bool = False
-    ):
+        all_objects: bool = False,
+    ) -> ModelType:
         """
         Returns by ID one object of a specific model from the database
         (if available), otherwise None.
@@ -68,7 +74,12 @@ class CRUDBase:
             return db_object.all()
         return db_object.first()
 
-    async def patch(self, object_in, db_object, session: AsyncSession):
+    async def patch(
+        self,
+        object_in: PatchSchemaType,
+        db_object: ModelType,
+        session: AsyncSession
+    ) -> ModelType:
         """
         Converts a database object and schema object into hash-tables,
         checks the presence of fields in the data for object changes
@@ -87,7 +98,11 @@ class CRUDBase:
         await session.refresh(db_object)
         return db_object
 
-    async def delete(self, db_object, session: AsyncSession):
+    async def delete(
+        self,
+        db_object: ModelType,
+        session: AsyncSession
+    ) -> ModelType:
         """
         Deletes an object from the database and returns it.
         """
@@ -100,7 +115,7 @@ class CRUDBase:
         attr_name: str,
         attr_value: str,
         session: AsyncSession
-    ):
+    ) -> Optional[bool]:
         """
         Checks the presence of an object in the database by attribute.
         """
