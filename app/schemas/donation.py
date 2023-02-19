@@ -1,15 +1,15 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel, Field, PositiveInt
 
 
 class DonationCreate(BaseModel):
     """
     The scheme defines the fields for creating donations and validates them.
     """
-    full_amount: PositiveInt
-    comment: Optional[str]
+    full_amount: PositiveInt = Field(..., example=3000)
+    comment: Optional[str] = Field(None, example='Деньги на дом котану')
 
 
 class DonationGetCreateDB(DonationCreate):

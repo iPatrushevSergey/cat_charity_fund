@@ -20,7 +20,7 @@ async def check_name_duplicate(
     )
     if charity_project_exists:
         raise HTTPException(
-            status_code=422,
+            status_code=400,
             detail='A charity project with that name already exists'
         )
 

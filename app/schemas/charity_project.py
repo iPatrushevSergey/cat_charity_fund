@@ -18,7 +18,15 @@ class CharityProjectCreate(CharityProjectBase):
     """
     The scheme is necessary to create a charity project.
     """
-    pass
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'name': 'Кошкин дом',
+                'description': 'Задача построить котану огромный дом',
+                'full_amount': 10000
+            }
+        }
 
 
 class CharityProjectUpdate(CharityProjectBase):
@@ -26,9 +34,9 @@ class CharityProjectUpdate(CharityProjectBase):
     The scheme defines fields for updating data about a charity
     project and validates them.
     """
-    name: Optional[str] = Field(None, min_length=1, max_length=100)
-    description: Optional[str]
-    full_amount: Optional[PositiveInt]
+    name: Optional[str] = Field(None, min_length=1, max_length=100, example='Дом для кролика')
+    description: Optional[str] = Field(None, example='Небольшой дом')
+    full_amount: Optional[PositiveInt] = Field(None, example=5000)
 
     @validator('name')
     def name_cannot_be_null(cls, value: str):

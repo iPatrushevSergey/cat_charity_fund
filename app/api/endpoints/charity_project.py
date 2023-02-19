@@ -13,6 +13,7 @@ from app.crud.charity_project import charity_project_crud
 from app.schemas.charity_project import (
     CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
 )
+from app.services.investment_process import invest_charity_project
 
 router = APIRouter()
 
@@ -48,7 +49,8 @@ async def create_charity_project(
     Only superuser is available.
     """
     await check_name_duplicate(object_in.name, session)
-    return await charity_project_crud.create(object_in, session)
+    charity_project = await charity_project_crud.create(object_in, session)
+    return await invest_charity_project.invest(session, charity_project)
 
 
 @router.patch(

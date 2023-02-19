@@ -10,6 +10,7 @@ from app.models import User
 from app.schemas.donation import (
     DonationCreate, DonationGetCreateDB, DonationGetDB
 )
+from app.services.investment_process import invest_donation
 
 router = APIRouter()
 
@@ -43,7 +44,8 @@ async def create_donation(
     """
     Creates a donation. Available only to an authorized user.
     """
-    return await donation_crud.create(object_in, session, user)
+    donation = await donation_crud.create(object_in, session, user)
+    return await invest_donation.invest(session, donation)
 
 
 @router.get(
