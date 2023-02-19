@@ -74,7 +74,7 @@ async def update_charity_project(
         await check_name_duplicate(object_in.name, session)
     check_fully_invested(charity_project)
     if object_in.full_amount:
-        await check_amount_not_less_than_nested(
+        check_amount_not_less_than_nested(
             charity_project, object_in.full_amount
         )
     return await charity_project_crud.patch(

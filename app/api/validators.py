@@ -13,12 +13,12 @@ async def check_name_duplicate(
     Checks the duplicate name of the charity project. If the name exists,
     it returns an exception.
     """
-    charity_project_id = await (
-        charity_project_crud.get_charity_project_by_name(
-            charity_project_name, session
+    charity_project_exists = await (
+        charity_project_crud.exists_object_by_attribute(
+            'name', charity_project_name, session
         )
     )
-    if charity_project_id is not None:
+    if charity_project_exists:
         raise HTTPException(
             status_code=422,
             detail='A charity project with that name already exists'
@@ -33,15 +33,15 @@ async def check_charity_project_exists(
     Checks the existence of a charity project. If it does not exist,
     it returns an exception.
     """
-    charity_project = await charity_project_crud.get(
-        charity_project_id, session
+    charity_project = await charity_project_crud.get_by_attribute(
+        'id', charity_project_id, session
     )
     if not charity_project:
         raise HTTPException(status_code=422, detail='Charity fund not found')
     return charity_project
 
 
-async def check_invested_amount(charity_project: CharityProject) -> None:
+def check_invested_amount(charity_project: CharityProject) -> None:
     """
     Checks the investment of money in a charity project. If invested, returns
     an exception.
@@ -54,7 +54,7 @@ async def check_invested_amount(charity_project: CharityProject) -> None:
         )
 
 
-async def check_fully_invested(charity_project: CharityProject) -> None:
+def check_fully_invested(charity_project: CharityProject) -> None:
     """
     Checks the closure of the charity project. If closed, return an exception.
     """
@@ -64,7 +64,7 @@ async def check_fully_invested(charity_project: CharityProject) -> None:
         )
 
 
-async def check_amount_not_less_than_nested(
+def check_amount_not_less_than_nested(
     charity_project: CharityProject,
     full_amount: int,
 ) -> None:

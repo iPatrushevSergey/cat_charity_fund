@@ -23,8 +23,8 @@ class CRUDBase:
         """
         Returns all objects of a specific model from the database.
         """
-        db_objects = await session.execute(select(self.model))
-        return db_objects.scalars().all()
+        db_objects = await session.scalars(select(self.model))
+        return db_objects.all()
 
     async def create(
         self,
@@ -47,17 +47,26 @@ class CRUDBase:
         await session.refresh(db_object)
         return db_object
 
-    async def get(self, object_id: int, session: AsyncSession):
+    async def get_by_attribute(
+        self,
+        attr_name: str,
+        attr_value: str,
+        session: AsyncSession,
+        all_objects: bool = False
+    ):
         """
         Returns by ID one object of a specific model from the database
         (if available), otherwise None.
         """
-        db_object = await session.execute(
+        attr = getattr(self.model, attr_name)
+        db_object = await session.scalars(
             select(self.model).where(
-                self.model.id == object_id
+                attr == attr_value
             )
         )
-        return db_object.scalars().first()
+        if all_objects:
+            return db_object.all()
+        return db_object.first()
 
     async def patch(self, object_in, db_object, session: AsyncSession):
         """
@@ -85,3 +94,21 @@ class CRUDBase:
         await session.delete(db_object)
         await session.commit()
         return db_object
+
+    async def exists_object_by_attribute(
+        self,
+        attr_name: str,
+        attr_value: str,
+        session: AsyncSession
+    ):
+        """
+        Checks the presence of an object in the database by attribute.
+        """
+        attr = getattr(self.model, attr_name)
+        exists_criteria = (
+            select(self.model).where(attr == attr_value).exists()
+        )
+        charity_project_exists = await session.scalars(
+            select(True).where(exists_criteria)
+        )
+        return charity_project_exists.first()

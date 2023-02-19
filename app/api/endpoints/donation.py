@@ -58,4 +58,6 @@ async def get_user_donations(
     Returns all donations of a specific user. Available only
     to an authorized user.
     """
-    return await donation_crud.get_by_user(user, session)
+    return await donation_crud.get_by_attribute(
+        'user_id', user.id, session, all_objects=True
+    )
