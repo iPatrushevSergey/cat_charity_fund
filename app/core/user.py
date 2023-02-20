@@ -78,8 +78,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         """
         Generates and sends a letter about successful registration.
         """
-        fast_mail = FastMail(send_message_config)
-        message = generates_message(
+        fast_mail = FastMail(send_message_config) # noqa
+        message = generates_message( # noqa
             user.email, registration_html, registration_subject
         )
         # Тесты не проходят, поэтому закомментировано.

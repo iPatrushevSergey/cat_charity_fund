@@ -7,5 +7,3 @@ max-complexity = 10
 exclude = 
    tests
    alembic/versions/*.py
-per-file-ignores =
-   ./app/core/user.py: F841
