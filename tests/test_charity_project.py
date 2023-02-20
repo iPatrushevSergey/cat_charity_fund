@@ -440,7 +440,7 @@ def test_update_charity_project_full_amount_smaller_already_invested(superuser_c
         json={
             'name': 'nunchaku',
             'description': 'Huge fan of chimichangas. Wanna buy a lot',
-            'full_amount': full_amount,
+            'invested_amount': full_amount,
         },
     )
     assert response.status_code == 422, (
