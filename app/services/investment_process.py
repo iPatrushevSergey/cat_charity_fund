@@ -36,8 +36,8 @@ class Investing:
                 index = 0
                 number_of_db_objects = len(db_objects)
 
-                while (not created_object.fully_invested
-                        and index < number_of_db_objects):
+                while (not created_object.fully_invested and
+                        index < number_of_db_objects):
                     db_object = db_objects[index]
                     created_obj_diff, db_obj_diff = (
                         self.counting_amounts(created_object, db_object))
