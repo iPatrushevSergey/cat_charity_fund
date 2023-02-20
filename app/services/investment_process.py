@@ -18,31 +18,41 @@ class Investing:
         """
         self.crud = crud
 
-    async def invest(self, session: AsyncSession, created_object: Union[CharityProject, Donation]):
+    async def invest(
+        self,
+        session: AsyncSession,
+        created_object: Union[CharityProject, Donation]
+    ):
         """
         Starts the investment process. If a CharityProject is received for
         input object, then Donation objects are requested from the database,
         and vice versa.
         """
         try:
-            db_objects = await self.crud.get_by_attribute('fully_invested', False, session, all_objects=True)
+            db_objects = await self.crud.get_by_attribute(
+                'fully_invested', False, session, all_objects=True
+            )
             if db_objects:
                 index = 0
                 number_of_db_objects = len(db_objects)
-                while not created_object.fully_invested and index < number_of_db_objects:
+
+                while (not created_object.fully_invested
+                        and index < number_of_db_objects):
                     db_object = db_objects[index]
-                    created_object_diff_amount, db_object_diff_amount = self.counting_amounts(created_object, db_object)
-                    if created_object_diff_amount > db_object_diff_amount:
+                    created_obj_diff, db_obj_diff = (
+                        self.counting_amounts(created_object, db_object))
+                    if created_obj_diff > db_obj_diff:
                         db_object = self.close_object(db_object)
-                        created_object.invested_amount += db_object_diff_amount
+                        created_object.invested_amount += db_obj_diff
                         index += 1
-                    elif created_object_diff_amount < db_object_diff_amount:
-                        db_object.invested_amount += created_object_diff_amount
+                    elif created_obj_diff < db_obj_diff:
+                        db_object.invested_amount += created_obj_diff
                         created_object = self.close_object(created_object)
-                    elif created_object_diff_amount == db_object_diff_amount:
+                    elif created_obj_diff == db_obj_diff:
                         created_object = self.close_object(created_object)
                         db_object = self.close_object(db_object)
                     session.add(db_object)
+
             session.add(created_object)
         except Exception as error:
             await session.rollback()
@@ -58,9 +68,11 @@ class Investing:
         and already invested, as well as the donation amount and the
         distributed amount.
         """
-        created_object_diff_amount = created_object.full_amount - created_object.invested_amount
-        db_object_diff_amount = db_object.full_amount - db_object.invested_amount
-        return created_object_diff_amount, db_object_diff_amount
+        created_obj_diff = (
+            created_object.full_amount - created_object.invested_amount
+        )
+        db_obj_diff = db_object.full_amount - db_object.invested_amount
+        return created_obj_diff, db_obj_diff
 
     def close_object(self, object):
         """

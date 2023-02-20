@@ -42,7 +42,8 @@ def process_revision_directives(context, revision, directives):
     Sets the incremental Revision ID.
     """
     migration_script = directives[0]
-    head_revision = ScriptDirectory.from_config(context.config).get_current_head()
+    head_revision = ScriptDirectory.from_config(
+        context.config).get_current_head()
     if head_revision is None:
         new_rev_id = 1
     else:

@@ -4,8 +4,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.validators import (
-    check_charity_project_exists, check_name_duplicate, check_invested_amount,
-    check_fully_invested, check_amount_not_less_than_nested
+    check_amount_not_less_than_nested, check_charity_project_exists,
+    check_empty_fields, check_fully_invested, check_invested_amount,
+    check_name_duplicate
 )
 from app.core.db import get_async_session
 from app.core.user import current_superuser
@@ -56,7 +57,6 @@ async def create_charity_project(
 @router.patch(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
@@ -71,11 +71,12 @@ async def update_charity_project(
     and returns the object with all fields. If the project is not closed,
     excludes the empty `close_date` field. Only superuser is available.
     """
+    check_empty_fields(object_in)
     charity_project = await check_charity_project_exists(project_id, session)
-    if charity_project.name is not None:
+    if object_in.name is not None:
         await check_name_duplicate(object_in.name, session)
     check_fully_invested(charity_project)
-    if object_in.full_amount:
+    if object_in.full_amount is not None:
         check_amount_not_less_than_nested(
             charity_project, object_in.full_amount
         )
@@ -87,7 +88,6 @@ async def update_charity_project(
 @router.delete(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
 async def delete_charity_project(

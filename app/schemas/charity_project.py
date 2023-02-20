@@ -10,7 +10,7 @@ class CharityProjectBase(BaseModel):
     and validates them.
     """
     name: str = Field(..., min_length=1, max_length=100)
-    description: str
+    description: str = Field(..., min_length=1)
     full_amount: PositiveInt
 
 
@@ -34,8 +34,12 @@ class CharityProjectUpdate(CharityProjectBase):
     The scheme defines fields for updating data about a charity
     project and validates them.
     """
-    name: Optional[str] = Field(None, min_length=1, max_length=100, example='Дом для кролика')
-    description: Optional[str] = Field(None, example='Небольшой дом')
+    name: Optional[str] = Field(
+        None, min_length=1, max_length=100, example='Дом для кролика'
+    )
+    description: Optional[str] = Field(
+        None, min_length=1, example='Небольшой дом'
+    )
     full_amount: Optional[PositiveInt] = Field(None, example=5000)
 
     @validator('name')

@@ -14,7 +14,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.db import get_async_session
 from app.core.send_message_config import (
-    registration_html, registration_subject, generates_message, send_message_config
+    registration_html, registration_subject,
+    generates_message, send_message_config
 )
 from app.models.user import User
 from app.schemas.user import UserCreate
@@ -78,7 +79,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         Generates and sends a letter about successful registration.
         """
         fast_mail = FastMail(send_message_config)
-        message = generates_message(user.email, registration_html, registration_subject)
+        message = generates_message(
+            user.email, registration_html, registration_subject
+        )
         await fast_mail.send_message(message)
 
 
