@@ -17,14 +17,6 @@ class Settings(BaseSettings):
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
 
-    # Не проходят тесты.
-    # mail_username: str = 'username',
-    # mail_password: str = '*********',
-    # mail_from: str = 'test@mail.com',
-    # mail_port: int = 465,
-    # mail_server: str = 'mail server',
-    # mail_from_name: str = 'from test mail',
-
     class Config:
         """
         Checks variables in the .env file.

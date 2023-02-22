@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,7 +22,7 @@ async def check_name_duplicate(
     )
     if charity_project_exists:
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='Проект с таким именем уже существует!'
         )
 
@@ -38,7 +39,10 @@ async def check_charity_project_exists(
         'id', charity_project_id, session
     )
     if not charity_project:
-        raise HTTPException(status_code=404, detail='Charity fund not found')
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Charity fund not found'
+        )
     return charity_project
 
 
@@ -49,7 +53,7 @@ def check_invested_amount(charity_project: CharityProject) -> None:
     """
     if charity_project.invested_amount:
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail='В проект были внесены средства, не подлежит удалению!'
         )
 
@@ -60,7 +64,8 @@ def check_fully_invested(charity_project: CharityProject) -> None:
     """
     if charity_project.fully_invested:
         raise HTTPException(
-            status_code=400, detail='Закрытый проект нельзя редактировать!'
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='Закрытый проект нельзя редактировать!'
         )
 
 
@@ -74,7 +79,7 @@ def check_amount_not_less_than_nested(
     """
     if new_full_amount < charity_project.invested_amount:
         raise HTTPException(
-            status_code=422,
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='It is impossible to set the required amount less than '
                    'the amount alredy invested'
         )
@@ -86,6 +91,6 @@ def check_empty_fields(object_in: CharityProjectUpdate):
     """
     if not object_in.dict(exclude_unset=True):
         raise HTTPException(
-            status_code=422,
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='All fields cannot be empty at the same time'
         )

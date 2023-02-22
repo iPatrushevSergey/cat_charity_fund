@@ -1,8 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.routers.entity_routers import charity_project_router as router
 from app.api.validators import (
     check_amount_not_less_than_nested, check_charity_project_exists,
     check_empty_fields, check_fully_invested, check_invested_amount,
@@ -15,8 +16,6 @@ from app.schemas.charity_project import (
     CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
 )
 from app.services.investment_process import invest_charity_project
-
-router = APIRouter()
 
 
 @router.get(

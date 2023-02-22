@@ -21,15 +21,11 @@
 
 ## Подготовка проекта
 
-1. Необходимо сделать **Fork** репозитория:
+1. Необходимо клонировать репозиторий:
 ```
-https://github.com/iPatrushevSergey/cat_charity_fund.git
+git clone https://github.com/iPatrushevSergey/cat_charity_fund.git
 ```
-2. Далее нужно клонировать проект:
-```
-git clone git@github.com:<ваш_username>/cat_charity_fund.git
-```
-3. Создать и активировать виртуальное окружение:
+2. Создать и активировать виртуальное окружение:
 
 - MacOS и Linux
 ```
@@ -39,11 +35,11 @@ python3 -m venv venv && . venv/bin/activate
 ```
 python -m venv venv && . venv/bin/activate
 ```
-4. Установить зависимости:
+3. Установить зависимости:
 ```
 pip install -r requirements.txt 
 ```
-5. Внести в **.env** файл настройки базы данных - **DATABASE_URL**; секретное слово - **SECRET**; email и password суперюзера - **FIRST_SUPERUSER_EMAIL** и **FIRST_SUPERUSER_PASSWORD**; настройки почтового клиента - **MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM, MAIL_PORT, MAIL_SERVER, MAIL_FROM_NAME**.  
+4. Внести в **app/core/config** и в **.env** файлы настройки базы данных - **DATABASE_URL**; секретное слово - **SECRET**; email и password суперюзера - **FIRST_SUPERUSER_EMAIL** и **FIRST_SUPERUSER_PASSWORD**; настройки почтового клиента - **MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM, MAIL_PORT, MAIL_SERVER, MAIL_FROM_NAME**.  
 
 ## Запуск проекта
 
@@ -51,7 +47,7 @@ pip install -r requirements.txt
 app.main:app --reload
 ```
 
-## Благотворительыне проекты в QRKot
+## Благотворительные проекты в QRKot
 
 В фонде QRKot может быть открыто несколько проектов, у каждого из которых есть название, описание и сумма, которую планируется собрать, количество инвестированных средств, дата создания и закрытия. Все пожертвования идут в проект, открытый раньше других. 
 
