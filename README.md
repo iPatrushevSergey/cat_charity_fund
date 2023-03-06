@@ -1,4 +1,4 @@
-![Python](https://img.shields.io/pypi/pyversions/scrapy?color=brightgreen&style=plastic) ![FastAPI](https://img.shields.io/badge/FastAPI-0.78.0-brightgreen>) ![Starlette](https://img.shields.io/badge/Starlette-0.19.1-brightgreen>) ![Pydantic](https://img.shields.io/badge/Pydantic-1.9.1-brightgreen>) ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1.4.36-brightgreen>) ![FastAPI-Users](https://img.shields.io/badge/FastAPIUsers-10.0.4-brightgreen>) ![Alembic](https://img.shields.io/badge/Alembic-1.7.7-brightgreen>)
+![Python](https://img.shields.io/pypi/pyversions/scrapy?color=brightgreen&style=plastic) ![FastAPI](https://img.shields.io/badge/FastAPI-0.78.0-brightgreen>) ![Starlette](https://img.shields.io/badge/Starlette-0.19.1-brightgreen>) ![Pydantic](https://img.shields.io/badge/Pydantic-1.9.1-brightgreen>) ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1.4.36-brightgreen>) ![FastAPI-Users](https://img.shields.io/badge/FastAPIUsers-10.0.4-brightgreen>) ![Alembic](https://img.shields.io/badge/Alembic-1.7.7-brightgreen>) ![Aiogoogle](https://img.shields.io/badge/Aiogoogle-5.2.0-brightgreen>)
 
 # Проект 22-го спринта "Асинхронное API приложение QRKot"
 
@@ -9,6 +9,8 @@
 связанные с поддержкой кошачьей популяции. Котану Ваську на прошлой неделе купили
 зимний пуховик и построили собственный дом.
 
+В проекте предусмотрена возможность выгрузки данных в **Googlesheets**.
+
 ## Технологии
 
 - Python 3.9
@@ -18,6 +20,7 @@
 - SQLAlchemy 1.4.36
 - FastAPI-Users 10.0.4
 - Alembic 1.7.7
+- Aiogoogle 5.2.0
 
 ## Подготовка проекта
 
@@ -289,7 +292,7 @@ POST-запрос /auth/jwt/logout
 #### 1. Текущий пользователь:
 GET-запрос /users/me
 
-*Только для авторизованных*
+*Только для авторизованных пользователей*
 
 > Ответ:
 >```json
@@ -377,6 +380,36 @@ PATCH-запрос /users/{id}
 >    "is_verified": false
 >}
 >```
+
+## Выгрузка данных
+
+В проекте реализована возможность выгрузки данных в **googlesheets**.
+
+### Пример API запроса
+
+#### Выгрузка информации о закрытых проектах с их сортировкой по скорости закрытия:
+POST-запрос /google/
+
+*Только для суперюзеров*
+
+> Ответ:
+>```json
+>{
+>    "Url": "https://docs.google.com/spreadsheets/d/1T08pitmOhW3_Uf676GTXT_7uncDOhAEhtNIM8r0m"
+>}
+>```
+
+*Примерный результат выгрузки в таблицу:*
+Отчёт от|2023/03/06 17:25:35||
+:-:|:-:|:-:|	
+Топ проектов по скорости закрытия||		
+Название проекта|Время сбора|Описание 
+Огород|0:03:19.104821|Для выращивания овощей
+Хлев|0:30:21.080874|Для свинюшек
+Будка|1 day, 4:15:27.667800|Для собак
+Дом|1 day, 4:15:27.667815|Для кошек
+Озеро|1 day, 5:15:01.667784|Для питья
+Небольшая аллея|1 day, 10:50:01.667749|Для игр
 
 + **Author**: Patrushev Sergey
 + **Mail**: PatrushevSergeyVal@yandex.ru
