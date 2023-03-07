@@ -1,4 +1,3 @@
-# Module with the email sending settings.
 from fastapi_mail import ConnectionConfig, MessageSchema, MessageType
 
 from app.core.config import settings

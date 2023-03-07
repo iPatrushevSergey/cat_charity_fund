@@ -7,6 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import Base
 from app.models import User
+
+
 ModelType = TypeVar('ModelType', bound=Base)
 CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)
 PatchSchemaType = TypeVar('PatchSchemaType', bound=Optional[BaseModel])
