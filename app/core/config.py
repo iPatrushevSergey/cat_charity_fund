@@ -16,6 +16,12 @@ class Settings(BaseSettings):
     secret: str = 'SECRET'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
+    mail_username: str = 'username',
+    mail_password: str = '*********',
+    mail_from: str = 'test@mail.com',
+    mail_port: int = 465,
+    mail_server: str = 'mail server',
+    mail_from_name: str = 'from test mail',
     type: Optional[str] = None
     project_id: Optional[str] = None
     private_key_id: Optional[str] = None
